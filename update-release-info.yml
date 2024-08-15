@@ -1,0 +1,25 @@
+name: Update Release Info
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  update-release-info:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Update release info
+      run: |
+        # You can add commands here to update any files if needed
+        # For example, you could update a JSON file with release info
+        # echo '{"version": "${{ github.event.release.tag_name }}"}' > release-info.json
+
+    - name: Commit and push if changed
+      run: |
+        git config --global user.name 'GitHub Actions'
+        git config --global user.email 'actions@github.com'
+        git add -A
+        git diff --quiet && git diff --staged --quiet || (git commit -m "Update release info for ${{ github.event.release.tag_name }}" && git push)
